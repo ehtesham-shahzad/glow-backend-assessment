@@ -4,8 +4,9 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { BusinessDto, Deal } from '../dto/business.dto';
+import { BusinessDto } from '../dto/business.dto';
 import { ResponseDto } from '../dto/response.dto';
+import { Deal } from '../enums/deal.enum';
 import { BusinessState } from './business.state';
 import { State } from './interface/state.interface';
 

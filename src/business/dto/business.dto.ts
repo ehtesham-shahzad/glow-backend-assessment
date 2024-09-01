@@ -8,13 +8,9 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
+import { Deal } from '../enums/deal.enum';
 import { Industry } from '../enums/industry.enum';
 import { ContactDto } from './contact.dto';
-
-export enum Deal {
-  Won = 'won',
-  Lost = 'lost',
-}
 
 export class BusinessDto {
   @IsNumberString()
