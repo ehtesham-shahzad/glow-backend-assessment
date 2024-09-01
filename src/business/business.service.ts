@@ -1,28 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBusinessDto } from './dto/create-business.dto';
-import { UpdateBusinessDto } from './dto/update-business.dto';
+import { businesses } from './businesses.data';
+import { BusinessDto } from './dto/business.dto';
+import { ResponseDto } from './dto/response.dto';
+import { BusinessState } from './states/business.state';
 
 @Injectable()
 export class BusinessService {
-  create(createBusinessDto: CreateBusinessDto) {
-    console.log(createBusinessDto);
-    return 'This action adds a new business';
+  constructor(private readonly businessState: BusinessState) {}
+
+  create(businessDto: BusinessDto): ResponseDto {
+    const newBusiness = this.businessState.getState().newBusiness(businessDto);
+    if (newBusiness) {
+      return newBusiness;
+    }
+
+    const marketApproved = this.businessState
+      .getState()
+      .marketApproved(businessDto);
+    if (marketApproved) {
+      return marketApproved;
+    }
+
+    const salesApproved = this.businessState
+      .getState()
+      .salesApproved(businessDto);
+    if (salesApproved) {
+      return salesApproved;
+    }
+
+    const dealWon = this.businessState.getState().dealWon();
+    if (dealWon) {
+      return dealWon;
+    }
+
+    const dealLost = this.businessState.getState().dealLost();
+    if (dealLost) {
+      return dealLost;
+    }
   }
 
   findAll() {
-    return `This action returns all business`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} business`;
-  }
-
-  update(id: number, updateBusinessDto: UpdateBusinessDto) {
-    console.log(updateBusinessDto);
-    return `This action updates a #${id} business`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} business`;
+    return businesses;
   }
 }
